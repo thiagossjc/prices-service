@@ -1,6 +1,5 @@
 package org.company.price.application.service;
 
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

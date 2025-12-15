@@ -31,11 +31,15 @@ paths:
         - name: applicationDate
           in: query
           required: true
-          example: '14/06/2020 16:00:00'
+          description: 'Application date in dd/MM/yyyy HH:mm:ss'
           schema:
             type: string
-            pattern: '^\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}(:\d{2})?$' # dd/MM/yyyy HH:mm[:ss]
+            pattern: '^\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}(:\d{2})?$'
             example: '14/06/2020 16:00:00'
+          examples:
+            sample:
+              summary: 'dd/MM/yyyy HH:mm:ss'
+              value: '14/06/2020 16:00:00'
       responses:
         "200":
           description: Price found

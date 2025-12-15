@@ -24,10 +24,7 @@ public class PriceRepositoryAdapter implements PriceRepositoryPort {
     R2dbcEntityTemplate template;
     PriceEntityMapper priceEntityMapper;
 
-    static final String CIRCUIT_BREAKER_NAME = "priceR2dbcCircuitBreaker";
-
     @Override
-    @CircuitBreaker(name = CIRCUIT_BREAKER_NAME, fallbackMethod = "fallbackFindTopApplicablePrice")
     public Mono<Price> findTopApplicablePrice(PriceSearchCriteria priceSearchCriteria) {
 
         var criteria = Criteria.where("brand_id").is(priceSearchCriteria.brandId())
