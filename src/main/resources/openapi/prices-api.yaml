@@ -1,0 +1,161 @@
+openapi: 3.0.3
+info:
+  title: Prices API
+  description: API for consulting the applicable price for a product on a specific date for a brand.
+  version: 1.0.0
+
+tags:
+  - name: Prices
+    description: Operations for applicable price consultation.
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /api/v1/prices:
+    get:
+      tags:
+        - Prices
+      summary: Get applicable price
+      parameters:
+        - name: brandId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: applicationDate
+          in: query
+          required: true
+          example: '14/06/2020 16:00:00'
+          schema:
+            type: string
+            pattern: '^\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}(:\d{2})?$' # dd/MM/yyyy HH:mm[:ss]
+            example: '14/06/2020 16:00:00'
+      responses:
+        "200":
+          description: Price found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceResponse"
+        "400":
+          description: Bad request. Validation failed.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+              examples:
+                missingParams:
+                  summary: Missing or invalid query parameters
+                  value:
+                    type: "https://example.com/probs/validation"
+                    title: "Validation failed"
+                    status: 400
+                    detail: "One or more parameters are invalid."
+                    instance: "/api/v1/prices"
+                    timestamp: "2025-01-01T12:00:00Z"
+                    traceId: "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
+                    errors:
+                      - field: "brandId"
+                        rejectedValue: null
+                        message: "brandId is required"
+                      - field: "applicationDate"
+                        rejectedValue: "31/13/2025 10:00"
+                        message: "applicationDate must be in dd/MM/yyyy HH:mm format"
+        "404":
+          description: Price not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+              examples:
+                notFound:
+                  summary: Price not found for given params
+                  value:
+                    type: "https://example.com/probs/not-found"
+                    title: "Not Found"
+                    status: 404
+                    detail: "Applicable price not found for the given product, brand and date."
+                    instance: "/api/v1/prices"
+                    timestamp: "2025-01-01T12:01:00Z"
+                    traceId: "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-02"
+
+components:
+  schemas:
+    PriceResponse:
+      type: object
+      properties:
+        brandId:
+          type: integer
+        productId:
+          type: integer
+        priceList:
+          type: integer
+        startDate:
+          type: string
+          pattern: '^\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}(:\d{2})?$'
+          example: '14/06/2020 00:00:00'
+        endDate:
+          type: string
+          pattern: '^\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}(:\d{2})?$'
+          example: '14/06/2020 18:30:00'
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: "Name of the invalid field or parameter"
+        rejectedValue:
+          description: "Value provided by the client"
+        message:
+          type: string
+          description: "Human-friendly validation message"
+      required:
+        - field
+        - message
+
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: "A URI reference that identifies the problem type"
+        title:
+          type: string
+          description: "Short, human-readable summary of the problem type"
+        status:
+          type: integer
+          description: "HTTP status code"
+        detail:
+          type: string
+          description: "Human-readable explanation specific to this occurrence"
+        instance:
+          type: string
+          description: "A URI reference that identifies the specific occurrence"
+        timestamp:
+          type: string
+          format: date-time
+          description: "Server timestamp when the error occurred"
+        traceId:
+          type: string
+          description: "Correlation id for tracing (from request headers or generated)"
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+      required:
+        - title
+        - status
+        - timestamp

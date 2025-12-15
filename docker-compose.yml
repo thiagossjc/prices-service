@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  prices-service:
+    build: .
+    container_name: prices-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - prices-net
+
+  h2-db:
+    image: oscarfonts/h2:2.1.214
+    container_name: h2-db
+    ports:
+      - "9092:9092"
+      - "8082:8082"
+    environment:
+      - H2_OPTIONS=-ifNotExists
+    networks:
+      - prices-net
+
+networks:
+  prices-net:
+    driver: bridge

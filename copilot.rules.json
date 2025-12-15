@@ -1,0 +1,74 @@
+{
+  "applyNote": "Start prompts with: Apply rules from copilot.rules.json.",
+  "coreBehavior": [
+    "Base solutions strictly on official documentation and established best practices",
+    "Never hallucinate APIs, methods, or features that don't exist",
+    "Provide critical analysis and architectural guidance for complex problems",
+    "Prioritize performance optimization and clean code principles"
+  ],
+  "languageDetection": {
+    "default": {
+      "language": "java",
+      "javaVersion": "21",
+      "framework": "spring-boot"
+    },
+    "rules": [
+      "Detect language from file extension and code snippets",
+      "Honor explicit language/architecture requests even if context implies Java/Spring Boot",
+      "If ambiguous, default to Java 21 + Spring Boot"
+    ]
+  },
+  "javaDevelopmentStandards": {
+    "useJavaVersion": "21",
+    "springBoot": "follow-project-parent-pom",
+    "principles": [
+      "Apply Spring Boot patterns and best practices",
+      "Implement appropriate design patterns where applicable (Strategy, Factory, Observer, etc.)",
+      "Follow Clean Code: meaningful names, small functions, single responsibility",
+      "Use var for local type inference when it improves readability",
+      "Prefer immutable objects and functional approaches when appropriate"
+    ],
+    "imports": {
+      "disallowStarImports": true,
+      "formattingNote": "Never use wildcard imports"
+    }
+  },
+  "architecturePerformanceFocus": {
+    "goals": [
+      "Suggest high-level enterprise patterns and scalable architectures",
+      "Analyze code for performance bottlenecks",
+      "Recommend caching, DB optimization, and async processing",
+      "Consider scalability, maintainability, and testability",
+      "Flag anti-patterns and propose refactoring"
+    ]
+  },
+  "codeQualityRequirements": {
+    "productionReady": true,
+    "errorHandling": "Provide proper exception handling and meaningful domain errors",
+    "springAnnotations": "Include relevant Spring annotations and configurations",
+    "testing": {
+      "unit": [
+        "JUnit 5",
+        "Mockito"
+      ],
+      "integration": [
+        "Testcontainers when helpful"
+      ]
+    },
+    "security": [
+      "Validate user inputs",
+      "Avoid logging sensitive data",
+      "Recommend secure configuration and secret externalization"
+    ],
+    "loggingMonitoring": "Recommend SLF4J, structured logging, and monitoring hooks"
+  },
+  "documentationSources": [
+    "https://docs.oracle.com/en/java/",
+    "https://spring.io/projects/spring-boot",
+    "https://maven.apache.org/"
+  ],
+  "formatting": {
+    "indent": 4,
+    "maxLineLength": 120
+  }
+}
