@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -31,20 +30,24 @@ jobs:
       - name: Build and test
         run: mvn clean verify -B
 
-      - name: Run Cucumber tests
-        run: mvn test -Dcucumber.options="classpath:features"
+  docker:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Build Docker image
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker build -t prices-service:latest .
+        run: docker build -t prices-service:latest .
 
       - name: Push Docker image to Docker Hub
-        if: github.ref == 'refs/heads/main'
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker tag prices-service:latest $DOCKER_USERNAME/prices-service:latest
+          docker tag prices-service:latest $DOCKER_USERNAME/prices-service:${{ github.sha }}
           docker push $DOCKER_USERNAME/prices-service:latest
+          docker push $DOCKER_USERNAME/prices-service:${{ github.sha }}

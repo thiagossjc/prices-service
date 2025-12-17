@@ -1,6 +1,5 @@
 package org.company.price.infrastructure.adapter.out;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
