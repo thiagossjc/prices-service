@@ -25,19 +25,17 @@ public class PriceService implements PriceUseCasePort {
     @Override
     public Mono<PriceResponseDTO> getApplicablePrice(Integer brandId, Integer productId, String applicationDate) {
 
-        var applicationLocalDateTime = ApplicationDateParser.parse(applicationDate);
-
-        var priceSearchCriteria=  PriceSearchCriteria.builder()
-                .productId(productId)
-                .brandId(brandId)
-                .applicationStart(applicationLocalDateTime)
-                .applicationEnd(applicationLocalDateTime)
-                .orderByDirection(ORDER_BY_DIRECTION_DESC)
-                .orderByColumnName(ORDER_BY_COLUMN_PRIORITY)
-                .limit(1)
-                .build();
-
-        return repository.findTopApplicablePrice(priceSearchCriteria)
+        return repository.findTopApplicablePrice(
+                        PriceSearchCriteria.builder()
+                                .productId(productId)
+                                .brandId(brandId)
+                                .applicationStart(ApplicationDateParser.parse(applicationDate))
+                                .applicationEnd(ApplicationDateParser.parse(applicationDate))
+                                .orderByDirection(ORDER_BY_DIRECTION_DESC)
+                                .orderByColumnName(ORDER_BY_COLUMN_PRIORITY)
+                                .limit(1)
+                                .build()
+                )
                 .map(mapper::toDto);
     }
 }
