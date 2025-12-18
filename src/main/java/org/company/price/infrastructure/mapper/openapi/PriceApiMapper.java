@@ -20,7 +20,7 @@ public interface PriceApiMapper {
 
     @Named("formatDate")
     static String formatDate(LocalDateTime dt) {
-        return dt == null ? null : dt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return dt == null ? null : dt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
 
     static BigDecimal preserveTwoDecimals(BigDecimal bd) {

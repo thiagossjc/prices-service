@@ -67,8 +67,8 @@ class PriceApiMapperTest {
         var response = priceApiMapper.toPriceResponse(priceDto);
 
         // Assert
-        var expectedDate = "15/12/2025";
-        var expectedNextDate = "16/12/2025";
+        var expectedDate = "15/12/2025 10:30:00";
+        var expectedNextDate = "16/12/2025 10:30:00";
 
         assertAll("Date formatting",
                 () -> assertThat(response.getStartDate()).isEqualTo(expectedDate),
