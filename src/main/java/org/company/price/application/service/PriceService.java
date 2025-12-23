@@ -8,6 +8,7 @@ import org.company.price.application.dto.PriceSearchCriteria;
 import org.company.price.application.mapper.PriceMapper;
 import org.company.price.application.port.PriceUseCasePort;
 import org.company.price.application.utils.ApplicationDateParser;
+import org.company.price.domain.exception.PriceNotFoundException;
 import org.company.price.domain.port.out.PriceRepositoryPort;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -36,6 +37,11 @@ public class PriceService implements PriceUseCasePort {
                                 .limit(1)
                                 .build()
                 )
-                .map(mapper::toDto);
+                .map(mapper::toDto)
+                .switchIfEmpty(Mono.error(new PriceNotFoundException(
+                        "Applicable price not found for product=" + productId +
+                                ", brand=" + brandId +
+                                ", date=" + applicationDate
+                )));
     }
 }

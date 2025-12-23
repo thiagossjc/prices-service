@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.company.price.application.port.PriceUseCasePort;
 
 import org.company.price.infrastructure.adapter.in.api.PricesApi;
-import org.company.price.infrastructure.adapter.in.api.error.ResourceNotFoundException;
 import org.company.price.infrastructure.adapter.in.api.model.PriceResponse;
 import org.company.price.infrastructure.mapper.openapi.PriceApiMapper;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +30,6 @@ public class PriceController implements PricesApi {
     ) {
         return priceUseCasePort.getApplicablePrice(brandId, productId, applicationDate)
                 .map(priceApiMapper::toPriceResponse)
-                .map(ResponseEntity::ok)
-                .switchIfEmpty(Mono.defer(() ->
-                        Mono.error(new ResourceNotFoundException("Applicable price not found for the given product, brand and date."))));
+                .map(ResponseEntity::ok);
     }
 }

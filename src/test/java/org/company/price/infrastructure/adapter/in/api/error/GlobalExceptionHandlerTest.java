@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.company.price.domain.exception.PriceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,10 +106,10 @@ class GlobalExceptionHandlerTest {
     @DisplayName("Should handle ResourceNotFoundException and return 404 NOT_FOUND")
     void shouldHandleNotFoundException() {
         // Arrange
-        var ex = new ResourceNotFoundException("Price not found for criteria");
+        var ex = new PriceNotFoundException("Price not found for criteria");
 
         // Act
-        Mono<ResponseEntity<ProblemDetails>> resultMono = handler.handleNotFound(ex, exchange);
+        Mono<ResponseEntity<ProblemDetails>> resultMono = handler.handlePriceNotFound(ex, exchange);
 
         // Assert
         StepVerifier.create(resultMono)

@@ -3,6 +3,7 @@ package org.company.price.infrastructure.adapter.in.api.controller;
 import org.company.price.application.dto.PriceResponseDTO;
 import org.company.price.application.port.PriceUseCasePort;
 import org.company.price.application.utils.ApplicationDateParser;
+import org.company.price.domain.exception.PriceNotFoundException;
 import org.company.price.infrastructure.adapter.in.api.error.GlobalExceptionHandler;
 import org.company.price.infrastructure.adapter.in.api.model.PriceResponse;
 import org.company.price.infrastructure.mapper.openapi.PriceApiMapper;
@@ -135,7 +136,10 @@ class PriceControllerTest {
         var dateIso = "15/06/2020 10:00:00";
 
         when(priceUseCasePort.getApplicablePrice(anyInt(), anyInt(), anyString()))
-                .thenReturn(Mono.empty());
+                .thenReturn(Mono.error(new PriceNotFoundException(
+                        "Applicable price not found for the given product, brand and date."
+                )));
+
 
         // Act
         webTestClient.get()
