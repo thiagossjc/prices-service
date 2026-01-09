@@ -13,6 +13,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Prices API")
                         .version("1.0.0")
-                        .description("Consulta de precios aplicables a productos por fecha y marca"));
+                        .description("Query of applicable product prices by date and brand."));
     }
 }
